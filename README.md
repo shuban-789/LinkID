@@ -1,4 +1,4 @@
-# LinkID-Blockchain [![Go Report Card](https://goreportcard.com/badge/github.com/TEAM-GOJO/LinkID-Blockchain)](https://goreportcard.com/report/github.com/TEAM-GOJO/LinkID-Blockchain)
+# LinkID-Blockchain [![Go Report Card](https://goreportcard.com/badge/github.com/shuban-789/LinkID)](https://goreportcard.com/report/github.com/shuban-789/LinkID)
 
 The LinkID Blockchain system is an AES encryption enhanced Blockchain system for MediLink to ensure secure containment and transfer of medical records.
 
