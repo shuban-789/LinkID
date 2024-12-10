@@ -4,9 +4,9 @@ The LinkID Blockchain system is an AES encryption enhanced Blockchain system for
 
 ## Contributions
 
-The LinkID blockchain system was created and programmed by me (Shuban Pal) and was a piece of the MediLink project for the 2024 San Diego Big Data Hackathon. The original repository is licensed under MIT by my name (Shuban Pal) and acts as an archive. Active updates and changes will now go to this repository which is also licensd under MIT by the name Shuban Pal.
+The LinkID blockchain system was created and programmed by me (Shuban Pal) as a subsystem of the MediLink project for the 2024 San Diego Big Data Hackathon. The original repository is licensed under MIT with my name (Shuban Pal) and acts as an archive. Although MediLink is now inactive, updates to LinkID will still be made. Active updates and changes will now go to this repository which is also licensed under the MIT license with my name. 
 
-All preceding commits prior to this version can be found on the archive repository [HERE](https://github.com/TEAM-GOJO/LinkID)
+All my preceding commits and contributions prior to this version can be found on the archive repository [HERE](https://github.com/TEAM-GOJO/LinkID)
 
 ## Makefile Variables for `OS` (GOOS)
 
