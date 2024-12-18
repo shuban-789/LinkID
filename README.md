@@ -10,6 +10,30 @@ The original repository is licensed under MIT with my name (Shuban Pal) and acts
 
 All my preceding commits and contributions prior to this version can be found on the archive repository [HERE](https://github.com/TEAM-GOJO/LinkID)
 
+## Usage
+
+```
+Usage: ./linkid [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
+
+
+Options:
+  -c, Create a new blockchain with the provided JSON file.
+                -E, Save the output as JSON
+  -a, Access an existing blockchain with the provided ID and key.
+                -E, Save the output as JSON
+  -A, Add a new block to an existing blockchain with the provided ID and key.
+
+Format:
+  ./linkid -c <GENESIS.json>
+  ./linkid -a <ID> <KEY>
+  ./linkid -A <BLOCK.json> <ID> <KEY>
+
+Examples:
+  ./linkid -c genesis.json
+  ./linkid -a 12345678 1234567890abcdef1234567890abcdef
+  ./linkid -A block.json 12345678 1234567890abcdef1234567890abcdef
+```
+
 ## Makefile Variables for `OS` (GOOS)
 
 Common Operating System configurations for compiling the LinkID source code via Makefile. If you want to compile the code on an operating system not listed below, please check out this [list](https://pkg.go.dev/internal/platform) for a list of valid `GOOS` and `GOARCH` combinations.
