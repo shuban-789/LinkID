@@ -322,7 +322,9 @@ func help() {
 	fmt.Println("")
 	fmt.Println("Options:")
 	fmt.Println("  -c, Create a new blockchain with the provided JSON file.")
+	fmt.Println("  		-E, Save the output as JSON")
 	fmt.Println("  -a, Access an existing blockchain with the provided ID and key.")
+	fmt.Println("  		-E, Save the output as JSON")
 	fmt.Println("  -A, Add a new block to an existing blockchain with the provided ID and key.")
 	fmt.Println("")
 	fmt.Println("Format:")
@@ -342,6 +344,11 @@ func main() {
 		return
 	}
 
+	saveToFile := false
+	if len(os.Args) > 2 && os.Args[2] == "-E" {
+		saveToFile = true
+	}
+
 	switch os.Args[1] {
 	case "-c":
 		if len(os.Args) < 3 {
@@ -350,6 +357,9 @@ func main() {
 		}
 
 		createCommand := os.Args[2]
+		if saveToFile {
+			createCommand = os.Args[3]
+		}
 		GenesisBlock, err := loadGenesisFromFile(createCommand)
 		if err != nil {
 			fmt.Println("Error loading genesis data:", err)
@@ -393,6 +403,21 @@ func main() {
 			fmt.Println("Error converting keys to JSON:", err)
 			return
 		}
+		
+		if saveToFile {
+			chainJSON, err := json.MarshalIndent(keys, "", "  ")
+			if err != nil {
+				fmt.Println("Error converting chain to JSON:", err)
+				return
+			}
+			err = ioutil.WriteFile("output.json", chainJSON, 0644)
+			if err != nil {
+				fmt.Println("Error saving chain to output.json:", err)
+			} else {
+				fmt.Println("Chain saved to output.json.")
+			}
+			return
+		}
 
 		fmt.Println(string(jsonData))
 
@@ -410,9 +435,28 @@ func main() {
 
 		accessCommand := os.Args[2]
 		key := os.Args[3]
+		if saveToFile {
+			accessCommand = os.Args[3]
+			key = os.Args[4]
+		}
 		TargetChain, err := loadEncryptedChain(accessCommand, key)
 		if err != nil {
 			fmt.Println("Error loading encrypted chain:", err)
+			return
+		}
+
+		if saveToFile {
+			chainJSON, err := json.MarshalIndent(TargetChain, "", "  ")
+			if err != nil {
+				fmt.Println("Error converting chain to JSON:", err)
+				return
+			}
+			err = ioutil.WriteFile("output.json", chainJSON, 0644)
+			if err != nil {
+				fmt.Println("Error saving chain to output.json:", err)
+			} else {
+				fmt.Println("Chain saved to output.json.")
+			}
 			return
 		}
 
@@ -462,16 +506,28 @@ func main() {
 			newBlockData.VisitLogs,
 			newBlockData.History,
 		})
-
 		addBlockToChain(addedBlock, &TargetChain)
+
+		if saveToFile {
+			chainJSON, err := json.MarshalIndent(TargetChain, "", "  ")
+			if err != nil {
+				fmt.Println("Error converting chain to JSON:", err)
+				return
+			}
+			err = ioutil.WriteFile("output.json", chainJSON, 0644)
+			if err != nil {
+				fmt.Println("Error saving chain to output.json:", err)
+			} else {
+				fmt.Println("Chain saved to output.json.")
+			}
+			return
+		}
 
 		err = exportEncryptedChain(TargetChain, key)
 		if err != nil {
 			fmt.Println("Error exporting encrypted chain:", err)
 			return
 		}
-
-		fmt.Println("Block added successfully.")
 
 	default:
 		help()
