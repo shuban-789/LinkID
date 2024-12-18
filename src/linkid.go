@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -318,16 +317,40 @@ func loadBlockFromFile(filePath string) (block, error) {
 	return newBlock, nil
 }
 
-func main() {
-	createCommand := flag.String("c", "", "Create a new chain with the path to the input JSON file.")
-	accessCommand := flag.String("a", "", "Access an existing chain by ID.")
-	addBlockCommand := flag.String("add", "", "Add a block to the chain with the path to the input JSON file.")
-	blockChainID := flag.String("id", "", "Chain ID for adding the block or accessing the chain.")
-	key := flag.String("k", "", "Private key for decrypting the chain.")
-	flag.Parse()
+func help() {
+	fmt.Println("Usage: ./linkid [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]\n")
+	fmt.Println("")
+	fmt.Println("Options:")
+	fmt.Println("  -c, Create a new blockchain with the provided JSON file.")
+	fmt.Println("  -a, Access an existing blockchain with the provided ID and key.")
+	fmt.Println("  -A, Add a new block to an existing blockchain with the provided ID and key.")
+	fmt.Println("")
+	fmt.Println("Format:")
+	fmt.Println("  ./linkid -c <GENESIS.json>")
+	fmt.Println("  ./linkid -a <ID> <KEY>")
+	fmt.Println("  ./linkid -A <BLOCK.json> <ID> <KEY>")
+	fmt.Println("")
+	fmt.Println("Examples:")
+	fmt.Println("  ./linkid -c genesis.json")
+	fmt.Println("  ./linkid -a 12345678 1234567890abcdef1234567890abcdef")
+	fmt.Println("  ./linkid -A block.json 12345678 1234567890abcdef1234567890abcdef")
+}
 
-	if *createCommand != "" {
-		GenesisBlock, err := loadGenesisFromFile(*createCommand)
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Please provide a valid command.")
+		return
+	}
+
+	switch os.Args[1] {
+	case "-c":
+		if len(os.Args) < 3 {
+			fmt.Println("Error: Missing path to the input JSON file.")
+			return
+		}
+
+		createCommand := os.Args[2]
+		GenesisBlock, err := loadGenesisFromFile(createCommand)
 		if err != nil {
 			fmt.Println("Error loading genesis data:", err)
 			return
@@ -360,7 +383,7 @@ func main() {
 		}
 
 		keys := map[string]interface{}{
-			"id":	ChainID,
+			"id":          ChainID,
 			"public_key":  publicKey,
 			"private_key": privateKey,
 		}
@@ -378,8 +401,16 @@ func main() {
 			fmt.Println("Error exporting encrypted chain:", err)
 			return
 		}
-	} else if *accessCommand != "" && *key != "" {
-		TargetChain, err := loadEncryptedChain(*accessCommand, *key)
+
+	case "-a":
+		if len(os.Args) < 4 {
+			fmt.Println("Error: Missing chain ID or private key.")
+			return
+		}
+
+		accessCommand := os.Args[2]
+		key := os.Args[3]
+		TargetChain, err := loadEncryptedChain(accessCommand, key)
 		if err != nil {
 			fmt.Println("Error loading encrypted chain:", err)
 			return
@@ -392,14 +423,24 @@ func main() {
 		}
 
 		fmt.Println(string(jsonData))
-	} else if *addBlockCommand != "" && *blockChainID != "" {
-		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
+
+	case "-A":
+		if len(os.Args) < 5 {
+			fmt.Println("Error: Missing chain ID, block data file, or private key.")
+			return
+		}
+
+		addBlockCommand := os.Args[2]
+		blockChainID := os.Args[3]
+		key := os.Args[4]
+
+		TargetChain, err := loadEncryptedChain(blockChainID, key)
 		if err != nil {
 			fmt.Println("Error loading encrypted chain:", err)
 			return
 		}
 
-		newBlockData, err := loadBlockFromFile(*addBlockCommand)
+		newBlockData, err := loadBlockFromFile(addBlockCommand)
 		if err != nil {
 			fmt.Println("Error loading block data:", err)
 			return
@@ -424,14 +465,15 @@ func main() {
 
 		addBlockToChain(addedBlock, &TargetChain)
 
-		err = exportEncryptedChain(TargetChain, *key)
+		err = exportEncryptedChain(TargetChain, key)
 		if err != nil {
 			fmt.Println("Error exporting encrypted chain:", err)
 			return
 		}
 
 		fmt.Println("Block added successfully.")
-	} else {
-		fmt.Println("Please provide a valid command.")
+
+	default:
+		help()
 	}
 }
