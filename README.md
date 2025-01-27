@@ -10,6 +10,8 @@ The original repository is licensed under MIT with my name (Shuban Pal) and acts
 
 All my preceding commits and contributions prior to this version can be found on the archive repository [HERE](https://github.com/TEAM-GOJO/LinkID)
 
+> DISCLAIMER: This program was written for educational purposes. As stated by the MIT license, any liability for damages is waived. This program still has multiple steps to go before it achieves robust security (Right now, it uses AES which is a symmetric encryption algorithm)
+
 ## Usage
 
 ```
