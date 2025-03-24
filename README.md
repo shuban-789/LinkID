@@ -10,6 +10,8 @@ The original repository is licensed under MIT with my name (Shuban Pal) and acts
 
 All my preceding commits and contributions prior to this version can be found on the archive repository [HERE](https://github.com/TEAM-GOJO/LinkID)
 
+> DISCLAIMER: This program was written for educational purposes. As stated by the MIT license, any liability for damages is waived. This program still has multiple steps to go before it achieves robust security (Right now, it uses AES which is a symmetric encryption algorithm)
+
 ## Usage
 
 ```
@@ -82,3 +84,12 @@ OS=windows
 | `ARCH=sparc64`        | SPARC64          |           | ✅        |
 | `ARCH=wasm`           | WebAssembly      | ✅        |           |
 
+## Notes
+
+Earlier it was attempted to implement an asymmetric solution into this project (Hybrid RSA/AES encryption) which is why the code was played around with for a bit concerning the genration of key pairs through RSA, the format at which the pairs could be generated and given out, and even some RSA experimentation. As of now, it would seem a bit out of place to use this hybrid encryption for the purpose and use set which this program was developed for. However, more development in the future may be gaurunteed. Here is how this could work out:
+
+- An RSA private key and public key is generated
+- The chain json file is still enrypted via AES, but the AES key itself is encrypted via the public key.
+- The program will require the private key and the encrypted AES key to unlock the chain
+
+The purpose of this could possibly be that the AES key itself may stay constant or may change not so often, however the public key and private key pair which encrypts and decrypts the key itself could alternate.
