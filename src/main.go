@@ -420,7 +420,7 @@ func main() {
 
 		fmt.Println(string(jsonData))
 
-		err = exportEncryptedChain(TestChain, privateKey)
+		err = exportEncryptedChain(TestChain, key)
 		if err != nil {
 			fmt.Println("Error exporting encrypted chain:", err)
 			return
@@ -428,7 +428,7 @@ func main() {
 
 	case "-a":
 		if len(os.Args) < 4 {
-			fmt.Println("Error: Missing chain ID or private key.")
+			fmt.Println("Error: Missing chain ID or key.")
 			return
 		}
 
@@ -469,7 +469,7 @@ func main() {
 
 	case "-A":
 		if len(os.Args) < 5 {
-			fmt.Println("Error: Missing chain ID, block data file, or private key.")
+			fmt.Println("Error: Missing chain ID, block data file, or key.")
 			return
 		}
 
