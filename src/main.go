@@ -207,7 +207,7 @@ func generateAESKey() (string, error) {
 	key := make([]byte, 32)
 	_, err := rand.Read(key)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 	return hex.EncodeToString(key), nil
 }
@@ -386,7 +386,7 @@ func main() {
 			Chain:      []block{GenesisBlock},
 		}
 
-		key := generateAESKey()
+		key, err := generateAESKey()
 		if err != nil {
 			fmt.Println("Error generating key pair:", err)
 			return
